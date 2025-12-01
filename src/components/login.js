@@ -1,5 +1,8 @@
 // src/components/login.js
 
+import { API_BASE } from "../config.js";
+
+
 export function loginHandler() {
   const usernameEl = document.getElementById("username");
   const passwordEl = document.getElementById("password");
@@ -16,7 +19,7 @@ export function loginHandler() {
     return;
   }
 
-  fetch("http://localhost:3000/login", {
+  fetch(`${API_BASE}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
