@@ -1,12 +1,15 @@
 // src/components/leaderboard.js
-
-import { API_BASE } from "../config.js";
-
+//??
 export function showLeaderboard() {
   const container = document.getElementById("leaderboardContainer");
   if (!container) return;
 
-  fetch(`${API_BASE}/login`)
+  const BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://cybermind-backend-qomw.onrender.com";
+
+  fetch(`${BASE_URL}/leaderboard`)
     .then((res) => res.json())
     .then((data) => {
       if (!Array.isArray(data) || data.length === 0) {
@@ -17,79 +20,55 @@ export function showLeaderboard() {
       const top3 = data.slice(0, 3);
       const rest = data.slice(3);
 
-      const topHtml = `
-        <div class="lb-top">
-          ${top3
-            .map((user, index) => renderTopCard(user, index + 1))
-            .join("")}
+      container.innerHTML = `
+        <div class="leaderboard">
+          <h2>Top Cyberminds</h2>
+          <div class="leaderboard-top3">
+            ${top3
+              .map(
+                (entry, index) => `
+              <div class="leader-card rank-${index + 1}">
+                <div class="rank-badge">#${index + 1}</div>
+                <div class="leader-info">
+                  <h3>${entry.username}</h3>
+                  <p>${entry.points} pts</p>
+                  <span class="tier-tag">${getTier(entry.points)}</span>
+                </div>
+              </div>
+            `
+              )
+              .join("")}
+          </div>
+
+          ${
+            rest.length > 0
+              ? `
+            <h3 class="leaderboard-subtitle">Others climbing the ranks</h3>
+            <ul class="leaderboard-list">
+              ${rest
+                .map(
+                  (entry, index) => `
+                <li>
+                  <span class="rank">#${index + 4}</span>
+                  <span class="user">${entry.username}</span>
+                  <span class="points">${entry.points} pts</span>
+                  <span class="tag">${getHexTag(index + 4)}</span>
+                </li>
+              `
+                )
+                .join("")}
+            </ul>
+          `
+              : ""
+          }
         </div>
       `;
-
-      const listHtml = `
-        <div class="lb-list-card">
-          ${rest
-            .map((user, idx) => renderRow(user, idx + 4)) // rank starts at 4
-            .join("")}
-        </div>
-      `;
-
-      container.innerHTML = topHtml + listHtml;
     })
     .catch((err) => {
-      console.error("Leaderboard error:", err);
+      console.error("Error loading leaderboard:", err);
       container.innerHTML =
-        "<p>Could not load leaderboard. Check backend.</p>";
+        "<p>Could not load leaderboard. Try again later.</p>";
     });
-}
-
-function renderTopCard(user, rank) {
-  const initials = getInitials(user.username);
-  const tier = getTier(user.points);
-  const hexTag = getHexTag(rank);
-
-  return `
-    <div class="lb-top-card">
-      <div class="lb-top-header">
-        <div class="lb-avatar-large">${initials}</div>
-        <div class="lb-top-meta">
-          <div class="lb-username">${user.username}</div>
-          <div class="lb-tag">${hexTag}[${tier}]</div>
-          <div class="lb-streak">🔥 3+ Day Streak</div>
-        </div>
-        <div class="lb-rank-number">${rank}</div>
-      </div>
-      <div class="lb-top-footer">
-        <span class="lb-points-label">Points</span>
-        <span class="lb-points-big">${user.points}</span>
-      </div>
-    </div>
-  `;
-}
-
-function renderRow(user, rank) {
-  const initials = getInitials(user.username);
-  const tier = getTier(user.points);
-  const hexTag = getHexTag(rank);
-
-  return `
-    <div class="lb-row">
-      <div class="lb-row-left">
-        <span class="lb-row-rank">${rank}</span>
-        <div class="lb-avatar-small">${initials}</div>
-        <div class="lb-row-text">
-          <div class="lb-username">${user.username}</div>
-          <div class="lb-tag-small">${hexTag}[${tier}]</div>
-          <div class="lb-streak-small">🔥 3+ Day Streak</div>
-        </div>
-      </div>
-      <div class="lb-row-points">${user.points} Points</div>
-    </div>
-  `;
-}
-
-function getInitials(name) {
-  if (!name) return "?";
-  return name[0].toUpperCase();
 }
 
 function getTier(points) {

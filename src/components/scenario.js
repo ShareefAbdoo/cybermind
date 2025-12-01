@@ -1,7 +1,4 @@
 // src/components/scenario.js
-import { API_BASE } from "../config.js";
-
-
 import { scenarios } from "./scenarioData.js";
 
 // simple quiz state
@@ -270,7 +267,12 @@ function applyScore(amount) {
   // amount can be positive or negative
   const numericAmount = Number(amount) || 0;
 
-  fetch(`${API_BASE}/login`, {
+  const BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://cybermind-backend-qomw.onrender.com";
+
+  fetch(`${BASE_URL}/updateScore`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, amount: numericAmount }),
@@ -285,7 +287,7 @@ function applyScore(amount) {
         let history = [];
         try {
           history = JSON.parse(
-            localStorage.getItem("cybermind_score_history") || "[]" 
+            localStorage.getItem("cybermind_score_history") || "[]"
           );
         } catch (_) {
           history = [];

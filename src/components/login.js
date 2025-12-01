@@ -1,8 +1,5 @@
 // src/components/login.js
 
-import { API_BASE } from "../config.js";
-
-
 export function loginHandler() {
   const usernameEl = document.getElementById("username");
   const passwordEl = document.getElementById("password");
@@ -19,7 +16,12 @@ export function loginHandler() {
     return;
   }
 
-  fetch(`${API_BASE}/login`, {
+  const BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://cybermind-backend-qomw.onrender.com";
+
+  fetch(`${BASE_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
