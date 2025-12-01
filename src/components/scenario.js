@@ -1,4 +1,6 @@
 // src/components/scenario.js
+import { API_BASE } from "../config.js";
+
 
 import { scenarios } from "./scenarioData.js";
 
@@ -268,7 +270,7 @@ function applyScore(amount) {
   // amount can be positive or negative
   const numericAmount = Number(amount) || 0;
 
-  fetch("http://localhost:3000/updateScore", {
+  fetch(`${API_BASE}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, amount: numericAmount }),

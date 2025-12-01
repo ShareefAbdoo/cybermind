@@ -1,10 +1,12 @@
 // src/components/leaderboard.js
 
+import { API_BASE } from "../config.js";
+
 export function showLeaderboard() {
   const container = document.getElementById("leaderboardContainer");
   if (!container) return;
 
-  fetch("http://localhost:3000/leaderboard")
+  fetch(`${API_BASE}/login`)
     .then((res) => res.json())
     .then((data) => {
       if (!Array.isArray(data) || data.length === 0) {
