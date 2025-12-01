@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberMind – Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <h1>CyberMind</h1>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="training.html">Training</a>
+      <a href="terminal.html">Terminal</a>
+    </div>
+  </nav>
+
+  <!-- USER INFO CARD -->
+  <div class="card">
+    <h2>Welcome, <span id="userLabel"></span></h2>
+    <p>Your Score: <span id="userScore"></span></p>
+  </div>
+
+  <!-- SCORE HISTORY CHART -->
+  <div class="card">
+    <h3>Score History</h3>
+    <canvas id="scoreChart" width="900" height="220"></canvas>
+  </div>
+
+  <!-- LEADERBOARD TITLE -->
+  <div class="card">
+    <h3>Leaderboard</h3>
+  </div>
+
+  <!-- LEADERBOARD CONTENT (injected by JS) -->
+  <div id="leaderboardContainer"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
